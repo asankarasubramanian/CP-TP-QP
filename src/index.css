@@ -1,0 +1,46 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* Figma design tokens */
+  --header-bg: #032d60;
+  --page-bg: #f3f3f3;
+  --surface-bg: #ffffff;
+  --border-color: #d8d8d8;
+  --border-light: #e5e5e5;
+
+  --text-primary: #2e2e2e;
+  --text-secondary: #5c5c5c;
+  --text-muted: #757575;
+  --text-dark-navy: #001e5b;
+  --text-navy: #293956;
+
+  --link-blue: #0250d9;
+  --status-cascaded-text: #056764;
+  --status-cascaded-bg: #def2e6;
+  --status-drafting-text: #0b5cab;
+  --status-drafting-bg: #d6edff;
+
+  --font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  font-family: var(--font-family);
+  background: var(--page-bg);
+  color: var(--text-primary);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 13px;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
