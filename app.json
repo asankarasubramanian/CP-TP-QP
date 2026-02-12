@@ -1,0 +1,11 @@
+{
+  "name": "CP-TP-QP",
+  "description": "Sales Planning Application – Capacity Planning & Territory Planning",
+  "repository": "https://github.com/asankarasubramanian/CP-TP-QP",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "stack": "heroku-24"
+}
