@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import { ChevronRight, ChevronDown, User, UserX, FileText, ArrowUpDown, X, Users, DollarSign, BarChart3, TrendingUp, Target } from 'lucide-react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
+import { ChevronRight, ChevronDown, User, UserX, FileText, ArrowUpDown, X } from 'lucide-react';
 import type { OrgNode } from '../types';
 import { getRolledUpHeadcount, getRolledUpValidatedCapacity, updateNodeInTree, updateHeadcountAndRollUp } from '../data/hierarchy';
 
@@ -457,39 +457,38 @@ export default function TreeTable({ data, onDataChange }: TreeTableProps) {
       if (!prev) return prev;
       return updateNodeInTree(prev, nodeId, updater);
     });
-  }, []);
+  }, [setTreeData]);
 
   const handleHeadcountUpdate = useCallback((nodeId: string, value: number) => {
     setTreeData((prev) => {
       if (!prev) return prev;
       return updateHeadcountAndRollUp(prev, nodeId, value);
     });
-  }, []);
+  }, [setTreeData]);
 
   const handleNodeClick = useCallback((node: OrgNode) => {
     setSelectedNode((prev) => prev?.id === node.id ? null : node);
   }, []);
 
   // Keep selectedNode in sync when treeData changes
-  useEffect(() => {
-    if (selectedNode && treeData) {
-      const findNode = (n: OrgNode): OrgNode | null => {
-        if (n.id === selectedNode.id) return n;
-        if (n.children) {
-          for (const c of n.children) {
-            const found = findNode(c);
-            if (found) return found;
-          }
+  const selectedNodeId = selectedNode?.id ?? null;
+  const syncedSelectedNode = useMemo(() => {
+    if (!selectedNodeId || !treeData) return null;
+    const findNode = (n: OrgNode): OrgNode | null => {
+      if (n.id === selectedNodeId) return n;
+      if (n.children) {
+        for (const c of n.children) {
+          const found = findNode(c);
+          if (found) return found;
         }
-        return null;
-      };
-      const updated = findNode(treeData);
-      if (updated) setSelectedNode(updated);
-    }
-  }, [treeData, selectedNode]);
+      }
+      return null;
+    };
+    return findNode(treeData);
+  }, [treeData, selectedNodeId]);
 
   return (
-    <div className={`tree-table-layout ${selectedNode ? 'tree-table-layout-panel-open' : ''}`}>
+    <div className={`tree-table-layout ${syncedSelectedNode ? 'tree-table-layout-panel-open' : ''}`}>
     <div className="tree-table-container">
       <div className="tree-table-wrapper">
         <table className="tree-table">
@@ -581,7 +580,7 @@ export default function TreeTable({ data, onDataChange }: TreeTableProps) {
                 onNodeUpdate={handleNodeUpdate}
                 onHeadcountUpdate={handleHeadcountUpdate}
                 onNodeClick={handleNodeClick}
-                selectedNodeId={selectedNode?.id ?? null}
+                selectedNodeId={selectedNodeId}
               />
             )}
           </tbody>
@@ -597,8 +596,8 @@ export default function TreeTable({ data, onDataChange }: TreeTableProps) {
       )}
     </div>
 
-    {selectedNode && (
-      <NodeSidePanel node={selectedNode} onClose={() => setSelectedNode(null)} addedColumns={addedColumns} />
+    {syncedSelectedNode && (
+      <NodeSidePanel node={syncedSelectedNode} onClose={() => setSelectedNode(null)} addedColumns={addedColumns} />
     )}
     </div>
   );

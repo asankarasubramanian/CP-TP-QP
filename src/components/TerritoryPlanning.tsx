@@ -108,7 +108,7 @@ export default function TerritoryPlanning({ orgData }: TerritoryPlanningProps) {
 
     // Round units ensuring they sum to exactly TOTAL_UNITS
     const flooredUnits = rawUnits.map((u) => Math.floor(u));
-    let remaining = TOTAL_UNITS - flooredUnits.reduce((s, v) => s + v, 0);
+    const remaining = TOTAL_UNITS - flooredUnits.reduce((s, v) => s + v, 0);
     const fractionals = rawUnits.map((u, i) => ({ i, frac: u - flooredUnits[i] }));
     fractionals.sort((a, b) => b.frac - a.frac);
     for (let k = 0; k < remaining; k++) {
@@ -117,7 +117,7 @@ export default function TerritoryPlanning({ orgData }: TerritoryPlanningProps) {
 
     // Round TAM to integers ensuring they sum to exactly TOTAL_TAM
     const flooredTam = rawTam.map((t) => Math.floor(t));
-    let remainingTam = TOTAL_TAM - flooredTam.reduce((s, v) => s + v, 0);
+    const remainingTam = TOTAL_TAM - flooredTam.reduce((s, v) => s + v, 0);
     const tamFractionals = rawTam.map((t, i) => ({ i, frac: t - flooredTam[i] }));
     tamFractionals.sort((a, b) => b.frac - a.frac);
     for (let k = 0; k < remainingTam; k++) {
