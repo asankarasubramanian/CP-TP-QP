@@ -3,9 +3,14 @@ import { ArrowLeft, Settings, HelpCircle, Map } from 'lucide-react';
 interface HeaderProps {
   currentPage: 'capacity' | 'territory';
   onNavigate: (page: 'capacity' | 'territory') => void;
+  segmentName?: string | null;
 }
 
-export default function Header({ currentPage, onNavigate }: HeaderProps) {
+export default function Header({ currentPage, onNavigate, segmentName }: HeaderProps) {
+  const segmentLabel = segmentName
+    ? `${segmentName.toUpperCase()} SEGMENT`
+    : 'AERO SEGMENT';
+
   return (
     <header className="header">
       <div className="header-left">
@@ -18,7 +23,7 @@ export default function Header({ currentPage, onNavigate }: HeaderProps) {
         <span className="header-title">
           {currentPage === 'territory' ? 'Territory Planning' : 'Capacity Planning'}
         </span>
-        <span className="header-plan">{currentPage === 'territory' ? 'AERO SEGMENT' : 'FY27 Plan'}</span>
+        <span className="header-plan">{currentPage === 'territory' ? segmentLabel : 'FY27 Plan'}</span>
       </div>
       <div className="header-right">
         <button

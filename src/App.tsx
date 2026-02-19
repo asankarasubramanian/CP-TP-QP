@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import Header from './components/Header';
 import SubHeader from './components/SubHeader';
 import TreeTable from './components/TreeTable';
@@ -10,7 +10,10 @@ import './App.css';
 type Page = 'capacity' | 'territory';
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('capacity');
+  const urlParams = useMemo(() => new URLSearchParams(window.location.search), []);
+  const segmentFromUrl = urlParams.get('segment');
+
+  const [currentPage, setCurrentPage] = useState<Page>(segmentFromUrl ? 'territory' : 'capacity');
   const [treeData, setTreeData] = useState<OrgNode | null>(orgHierarchy);
 
   const handleDataChange = useCallback((data: OrgNode | null) => {
@@ -19,7 +22,7 @@ function App() {
 
   return (
     <div className="app">
-      <Header currentPage={currentPage} onNavigate={setCurrentPage} />
+      <Header currentPage={currentPage} onNavigate={setCurrentPage} segmentName={segmentFromUrl} />
       {currentPage === 'capacity' && (
         <>
           <SubHeader />
